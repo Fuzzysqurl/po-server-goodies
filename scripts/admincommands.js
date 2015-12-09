@@ -83,13 +83,12 @@ exports.handleCommand = function(src, command, commandData, tar, channel) {
             normalbot.sendMessage(src, "He/she's already banned!", channel);
             return;
         }
-        
-        if (script.isTempBanned(ip)) {
-            sys.unban(commandData); //needed as at the moment bans don't overwrite tempbans
+        if (!sys.id(commandData)) {
+            normalbot.sendAll("Target: " + commandData + ", IP: " + ip, staffchannel);
+            sendChanHtmlAll('<b><font color=red>' + nonFlashing(sys.name(src)) + ' banned ' + commandData + '!</font></b>',-1);
         }
-        normalbot.sendAll("Target: " + commandData + ", IP: " + ip, staffchannel);
-        sendChanHtmlAll('<b><font color=red>' + commandData + ' was banned by ' + nonFlashing(sys.name(src)) + '!</font></b>',-1);
-        sys.ban(commandData);
+        
+        sys.ban(src, commandData);
         script.kickAll(ip);
         sys.appendToFile('bans.txt', sys.name(src) + ' banned ' + commandData + "\n");
         var authname = sys.name(src).toLowerCase();

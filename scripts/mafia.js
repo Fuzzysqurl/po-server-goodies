@@ -6690,7 +6690,7 @@ function Mafia(mafiachan) {
             sys.kick(src, mafiachan);
         }
     };
-    this.onBan = function (src, dest) {//Only for Control panel bans
+    this.onBan = function (src, dest) {
         var dest = sys.name(dest);
         if (this.state == "entry" || this.state == "voting") {
             this.shoveUser(mafiabot.name, dest, false);

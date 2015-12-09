@@ -651,10 +651,13 @@ exports.handleCommand = function(src, command, commandData, tar, channel) {
         if (sys.banned(ip)) {
             normalbot.sendMessage(src, "He/she's already banned!", channel);
             return;
+        }        
+        if (!sys.id(target_name)) {
+            normalbot.sendAll("Target: " + target_name + ", IP: " + ip, staffchannel);
+            sys.sendHtmlAll('<b><font color=red>' + nonFlashing(sys.name(src)) + ' banned ' +  target_name + ' for ' + getTimeString(minutes) + '!</font></b>');
         }
-        normalbot.sendAll("Target: " + target_name + ", IP: " + ip, staffchannel);
-        sys.sendHtmlAll('<b><font color=red>' + target_name + ' was banned by ' + nonFlashing(sys.name(src)) + ' for ' + getTimeString(minutes) + '!</font></b>');
-        sys.tempBan(target_name, parseInt(minutes/60, 10));
+        
+        sys.tempBan(target_name, parseInt(minutes/60, 10), src);
         script.kickAll(ip);
         var authname = sys.name(src);
         script.authStats[authname] = script.authStats[authname] || {};
@@ -671,7 +674,7 @@ exports.handleCommand = function(src, command, commandData, tar, channel) {
             normalbot.sendMessage(src, "You cannot unban people who are banned for longer than a day!", channel);
             return;
         }
-        normalbot.sendAll(sys.name(src) + " unbanned " + commandData, staffchannel);
+        normalbot.sendAll(nonFlashing(sys.name(src)) + " unbanned " + commandData, staffchannel);
         sys.unban(commandData);
         return;
     }
